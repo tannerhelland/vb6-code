@@ -2,7 +2,7 @@
 
 Unless otherwise noted, all code in this repository is available under a Simplified BSD License.  Full license text is available in LICENSE.md.
 
-If you find the code useful, please consider [a small donation](paypal.me/TannerHelland).
+If you find the code useful, please consider [a small donation](https://paypal.me/TannerHelland).
 
 If you're unfamiliar with Git or GitHub, here is a brief overview of the many ways you can access these projects:
 - Individual files can be browsed online by clicking on file/folder names
