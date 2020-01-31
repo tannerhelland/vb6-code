@@ -97,7 +97,9 @@ End Sub
 
 'This routine draws the background stars onto the buffer
 Public Sub DrawStars()
-
+    
+    If (Not GameActive) Then Exit Sub
+    
     'First, clear the buffer of any previous stars
     frmMain.PicScreenBuffer.Cls
     
@@ -118,6 +120,8 @@ End Sub
 
 'This routine tracks and processes the movement of our little spaceship
 Public Sub VelocityCode()
+    
+    If (Not GameActive) Then Exit Sub
     
     'Movement Up
     If sUp = 1 Then
@@ -192,7 +196,9 @@ End Sub
 
 'This routine fires bullets/laser blasts from the ship's nose
 Public Sub FireBullets()
-
+    
+    If (Not GameActive) Then Exit Sub
+    
     'Run a loop through every bullet
     For X = 0 To NumOfBullets
     

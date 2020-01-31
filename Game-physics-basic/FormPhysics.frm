@@ -352,60 +352,73 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
+Private Sub chkFramerate_Click()
+    PicMain.SetFocus
+End Sub
 
 'START GAME AT FORM LOAD...
 Private Sub Form_Load()
+
     'Upon form load, it's necessary to initialize some key variables
     InitializeGameEngine
+    
     'When everything is set, start the game!
     GameActive = True
     MainLoop   'MainLoop appears at the bottom of the form
+    
 End Sub
 
 'END GAME
 Private Sub cmdExit_Click()
     GameActive = False
-    Unload Me
 End Sub
 
 'WHEN A KEY IS PRESSED...
 Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
-    'Depending on the arrow key being pressed, set the correct
-    'direction variable and the correct ship picture
+    
+    'Depending on the arrow key being pressed, set the correct direction variable
+    ' and the correct ship picture
+    
     'Left
     If KeyCode = vbKeyLeft Then
         sLeft = 1
         picShip.Picture = PicL.Picture
         picShipMask.Picture = PicLM.Picture
     End If
+    
     'Right
     If KeyCode = vbKeyRight Then
         sRight = 1
         picShip.Picture = PicR.Picture
         picShipMask.Picture = PicRM.Picture
     End If
+    
     'Up
     If KeyCode = vbKeyUp Then sUp = 1
+    
     'Down
     If KeyCode = vbKeyDown Then sDown = 1
+    
     'Space (fire the gun)
     If KeyCode = vbKeySpace Then Firing = True
+    
     'Escape (end the game)
-    If KeyCode = vbKeyEscape Then
-        GameActive = 0
-        End
-    End If
+    If KeyCode = vbKeyEscape Then GameActive = False
+    
 End Sub
 
 'WHEN A KEY IS RELEASED...
 Private Sub Form_KeyUp(KeyCode As Integer, Shift As Integer)
+
     'Whenever an arrow key is released, reset motion in that direction
     If KeyCode = vbKeyLeft Then sLeft = 0
     If KeyCode = vbKeyRight Then sRight = 0
     If KeyCode = vbKeyUp Then sUp = 0
     If KeyCode = vbKeyDown Then sDown = 0
+    
     'When the space bar is released, stop firing
     If KeyCode = vbKeySpace Then Firing = False
+    
 End Sub
 
 'MAIN LOOP
@@ -414,7 +427,9 @@ Public Sub MainLoop()
     'This variable is used to track time and reduce framerate (if necessary)
     Dim timeDelay As Single
     
-    Do
+    Do While GameActive
+        
+        If (Not GameActive) Then Exit Do
         
         'Calculate time at the start of the function
         timeDelay = Timer
@@ -429,18 +444,21 @@ Public Sub MainLoop()
         FireBullets
         
         'Change the velocity caption
-        LblVel.Caption = 50 - sVelVert & " kps"
-        DoEvents
+        LblVel.Caption = CStr(50 - sVelVert) & " kps"
+        If GameActive Then DoEvents Else Exit Do
         
         'If framerate limitations are active, loop until enough time has passed
-        If chkFramerate.Value = vbChecked Then
-            Do While GameActive And ((Timer - timeDelay) < 1.66666666666667E-02)
-                DoEvents
+        If (chkFramerate.Value = vbChecked) Then
+            Do While (GameActive And ((Timer - timeDelay) < 1.66666666666667E-02))
+                If GameActive Then DoEvents Else Exit Do
             Loop
         End If
-    
+        
     'Then do it all again...
-    Loop While GameActive
+    Loop
+    
+    'When the loop exits, release the main form
+    Unload Me
     
 End Sub
 
